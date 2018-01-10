@@ -1,6 +1,4 @@
 var multistream = require('multistream')
-var through2 = require('through2')
-// readrc should inherit from readable
 
 module.exports = Readrc
 
@@ -21,20 +19,10 @@ Readrc.prototype.filter = function (filter) {
 Readrc.prototype._read = function () {
   var count = 0;
   var feed = this.feeds()
-    // .pipe(require('./lib/stream-crawl')(this._crawler))
-    // .pipe(require('./lib/stream-scrape')())
+    .pipe(require('./lib/stream-crawl')())
+    .pipe(require('./lib/stream-scrape')())
     // .pipe(require('./lib/stream-filter')(this._filters))
-
-  feed.on('data', (data) => {
-    count++;
-  })
-  feed.on('end', () => {
-    console.log(count)
-  })
-    // .pipe(crawl(crawler))
-    // .pipe(scrape)
-    // .pipe(filter)
-
+    .resume()
 }
 
 Readrc.prototype.feeds = function () {
@@ -44,9 +32,3 @@ Readrc.prototype.feeds = function () {
 var rc = Readrc()
 rc.add(require('./feeds/aeon'))
 rc._read()
-
-
-// fetch feeds
-// crawl with crawlers
-// scrape with scrapers
-// filter with filters

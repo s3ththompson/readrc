@@ -7,12 +7,16 @@
     "lib": "lib"
   },
   "dependencies": {
+    "cheerio": "^1.0.0-rc.2",
+    "debug": "^3.1.0",
     "feedparser": "^2.2.8",
     "iconv-lite": "^0.4.19",
     "multistream": "^2.1.0",
     "readable-stream": "^2.3.3",
     "request": "^2.83.0",
+    "require-directory": "^2.1.1",
     "through2": "^2.0.3",
+    "unfluff": "^3.0.0",
     "zlib": "^1.0.5"
   },
   "devDependencies": {},
