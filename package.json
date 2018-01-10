@@ -1,11 +1,8 @@
 {
   "name": "readrc",
-  "version": "1.0.0",
-  "description": "",
+  "version": "0.1.0",
+  "description": "dotfiles for online news",
   "main": "index.js",
-  "directories": {
-    "lib": "lib"
-  },
   "dependencies": {
     "async-disk-cache": "^1.3.3",
     "cheerio": "^1.0.0-rc.2",
@@ -27,6 +24,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
+  "author": "Seth Thompson <s3th.thompson@gmail.com> (https://seththompson.org)",
+  "repository": "s3ththompson/readrc",
   "license": "MIT"
 }
