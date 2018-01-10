@@ -1,12 +1,17 @@
+var Emitter = require('events').EventEmitter
 var multistream = require('multistream')
+var plumber = require('gulp-plumber');
 
 module.exports = Readrc
 
 function Readrc () {
-  if (!(this instanceof Readrc)) return new Readrc
+  if (!(this instanceof Readrc)) return new Readrc()
   this._feeds = []
   this._filters = []
+  Emitter.call(this)
 }
+Readrc.prototype = Object.create(Emitter.prototype)
+Readrc.prototype.constructor = Readrc
 
 Readrc.prototype.add = function (feed) {
   this._feeds.push(feed)
@@ -17,12 +22,20 @@ Readrc.prototype.filter = function (filter) {
 }
 
 Readrc.prototype._read = function () {
-  var count = 0;
+  var c = 0;
   var feed = this.feeds()
-    .pipe(require('./lib/stream-crawl')())
-    .pipe(require('./lib/stream-scrape')())
+    .pipe(plumber((err) => {
+      this.emit('error', err)
+    }))
+    .pipe(require('./lib/stream-crawl')(this.emit.bind(this)))
+    .pipe(require('./lib/stream-scrape')(this.emit.bind(this)))
     // .pipe(require('./lib/stream-filter')(this._filters))
-    .resume()
+  feed.on('data', (data) => {
+    c++
+  })
+  feed.on('end', () => {
+    console.log('stream ended', c)
+  })
 }
 
 Readrc.prototype.feeds = function () {
@@ -32,3 +45,6 @@ Readrc.prototype.feeds = function () {
 var rc = Readrc()
 rc.add(require('./feeds/aeon'))
 rc._read()
+rc.on('error', (err) => {
+  console.log(err)
+})
