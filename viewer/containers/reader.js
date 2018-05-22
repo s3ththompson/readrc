@@ -11,6 +11,7 @@ function Reader () {
   Nanofetcher.call(this)
   this.gist = null
   this.identity = null
+  this.post = null
 }
 Reader.prototype = Object.create(Nanofetcher.prototype)
 Reader.prototype.constructor = Reader
@@ -30,10 +31,30 @@ Reader.prototype.placeholder = function () {
 }
 
 Reader.prototype.hydrate = function (readrc) {
-  return html`<div>
-    <h1>${readrc.posts[0].title}</h1>
-    <div>${readrc.posts[0].content}</div>
-  </div>`
+  var click = (idx) => () => {
+    this.post = idx + 1
+    this.emit('render')
+  }
+
+  var back = () => {
+    this.post = null
+    this.emit('render')
+  }
+
+  if (!this.post) {
+    var posts = readrc.posts.map((post, idx) => {
+      return html`<li><h2 class="pointer" onclick=${click(idx)}>${post.title}</h2></li>`
+    })
+    return html`<div><ul>${posts}</ul></div>`
+  }
+  else {
+    var post = readrc.posts[this.post - 1]
+    return html`<div class="pa2">
+        <span class="pointer white bg-black mv1 pa2 dim dib" onclick=${back}>Back</span>
+        <h1>${post.title}</h1>
+        <p class="serif lh-copy mw7">${post.content}</p>
+      </div>`
+  }
 }
 
 Reader.prototype.fetch = function (cb) {
@@ -49,6 +70,6 @@ Reader.prototype.fetch = function (cb) {
   }
 }
 
-Reader.prototype.update = function (gist) {
-  return this.identity == Reader.identity(gist)
+Reader.prototype.update = function (gist, token, post) {
+  return !(this.identity === Reader.identity(gist) && this.post === post)
 }
