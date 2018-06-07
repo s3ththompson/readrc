@@ -21,3 +21,10 @@ Create a beautiful digital magazine by applying custom themes to scraped content
 > Share what you read with others.
 
 Host your digests and the algorithms that generate them on the P2P web with [Dat](https://datproject.org/) and [Beaker Browser](https://beakerbrowser.com/). Incorporate other people's readrc algorithms into your own to read the same things they do.
+
+-------
+
+### Community
+
+Join us on IRC: `irc://irc.freenode.net:6667/#readrc`
+
